@@ -3,8 +3,8 @@ package com.init.service;
 import com.init.dto.ModelRequest;
 import com.init.dto.response.Response;
 import com.init.enums.Condition;
-import com.init.model.Brand;
-import com.init.model.Model;
+import com.init.model.CarBrand;
+import com.init.model.CarModel;
 import com.init.repo.BrandRepo;
 import com.init.repo.ModelRepo;
 import com.init.utils.Validation;
@@ -31,57 +31,57 @@ public class ModelService {
         if (error != null)
             return Response.setUpResponse(400, error);
 
-        Brand brand = brandRepo.getBrandById(modelRequest.getBrandId());
-        if (brand == null)
+        CarBrand carBrand = brandRepo.getBrandById(modelRequest.getBrandId());
+        if (carBrand == null)
             return Response.setUpResponse(400, "Brand does not exist.");
-        if (brand.isDeleted())
+        if (carBrand.isDeleted())
             return Response.setUpResponse(400," Brand not authorized ");
-        Model model = modelRepo.getModelById(modelRequest.getBrandId());
-        if (model == null)
-            model = new Model();
-        model = model.buildModel(model,modelRequest,brand,new BigDecimal(modelRequest.getPrice()),condition);
+        CarModel carModel = modelRepo.getModelById(modelRequest.getBrandId());
+        if (carModel == null)
+            carModel = new CarModel();
+        carModel = carModel.buildModel(carModel,modelRequest, carBrand,new BigDecimal(modelRequest.getPrice()),condition);
 
-        modelRepo.save(model);
-        return Response.setUpResponse(200, model.getName() + " was added successfully");
+        modelRepo.save(carModel);
+        return Response.setUpResponse(200, carModel.getName() + " was added successfully");
 
     }
 
     public ResponseEntity<?> deleteBrand(Long id) {
 
-        Model model = modelRepo.getModelById(id);
-        if (model == null)
+        CarModel carModel = modelRepo.getModelById(id);
+        if (carModel == null)
             return Response.setUpResponse(400, "No record found");
-        model.setDeleted(true);
-        modelRepo.save(model);
+        carModel.setDeleted(true);
+        modelRepo.save(carModel);
         return Response.setUpResponse(200, "Model deleted successfully");
 
     }
 
     public ResponseEntity<?> findAll() {
-        List<Model> models = modelRepo.findAllModel();
-        if (models.isEmpty())
+        List<CarModel> carModels = modelRepo.findAllModel();
+        if (carModels.isEmpty())
             return Response.setUpResponse(404, "No record found");
-        return Response.setUpResponse(200, "List of models ", models);
+        return Response.setUpResponse(200, "List of models ", carModels);
     }
 
     public ResponseEntity<?> searchByBrand(String brandName) {
-        List<Model> models = modelRepo.search(brandName,false);
-        if (models.isEmpty())
+        List<CarModel> carModels = modelRepo.search(brandName,false);
+        if (carModels.isEmpty())
             return Response.setUpResponse(404, "No record found");
-        return Response.setUpResponse(200, "List of models ", models);
+        return Response.setUpResponse(200, "List of models ", carModels);
     }
 
     public ResponseEntity<?> findAllByBrand(Long id, String brandName) {
-        List<Model> models = modelRepo.findAllByBrand(id,brandName,false);
-        if (models.isEmpty())
+        List<CarModel> carModels = modelRepo.findAllByBrand(id,brandName,false);
+        if (carModels.isEmpty())
             return Response.setUpResponse(404, "No record found");
-        return Response.setUpResponse(200, "List of models ", models);
+        return Response.setUpResponse(200, "List of models ", carModels);
     }
 
     public ResponseEntity<?> findByName(String name) {
-        Model model = modelRepo.getModelByName(name.toLowerCase());
-        if (model == null)
+        CarModel carModel = modelRepo.getModelByName(name.toLowerCase());
+        if (carModel == null)
             return Response.setUpResponse(404, "No record found");
-        return Response.setUpResponse(200, "Record found ", model);
+        return Response.setUpResponse(200, "Record found ", carModel);
     }
 }

@@ -1,7 +1,6 @@
 package com.init.repo;
 
-import com.init.model.Brand;
-import com.init.model.Model;
+import com.init.model.CarModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -9,19 +8,19 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ModelRepo extends JpaRepository<Model,Long> {
+public interface ModelRepo extends JpaRepository<CarModel,Long> {
 
-    Model getModelById(Long id);
+    CarModel getModelById(Long id);
 
-    @Query("select m from Model m where  lower( m.name) =?1")
-    Model getModelByName(String name);
+    @Query("select m from CarModel m where  lower( m.name) =?1")
+    CarModel getModelByName(String name);
 
-    @Query("select m from Model m where m.brand.id = ?1 or m.brand.name =?2 and m.deleted =?3")
-    List<Model> findAllByBrand(Long id, String brandName,boolean deleted);
+    @Query("select m from CarModel m where m.brand.id = ?1 or m.brand.name =?2 and m.deleted =?3")
+    List<CarModel> findAllByBrand(Long id, String brandName, boolean deleted);
 
-    @Query("select m from Model m where (lower( m.brand.name) like %?1% or lower(m.name) like %?1%) and m.deleted =?2")
-    List<Model> search(String brandName,boolean isDeleted);
+    @Query("select m from CarModel m where (lower( m.brand.name) like %?1% or lower(m.name) like %?1%) and m.deleted =?2")
+    List<CarModel> search(String brandName, boolean isDeleted);
 
-    @Query("select m from Model m where  m.deleted =?2")
-    List<Model> findAllModel();
+    @Query("select m from CarModel m where  m.deleted =?2")
+    List<CarModel> findAllModel();
 }

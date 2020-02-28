@@ -2,7 +2,7 @@ package com.init.service;
 
 import com.init.dto.BrandRequest;
 import com.init.dto.response.Response;
-import com.init.model.Brand;
+import com.init.model.CarBrand;
 import com.init.repo.BrandRepo;
 import com.init.utils.Validation;
 import lombok.extern.slf4j.Slf4j;
@@ -30,42 +30,42 @@ public class BrandService {
         if (brandRepo.getBrandByName(brandRequest.getName()) != null)
             return Response.setUpResponse(400, "Brand name already exist. Name must be unique");
 
-        Brand brand = Brand.builder().name(brandRequest.getName()).build();
+        CarBrand carBrand = CarBrand.builder().name(brandRequest.getName()).build();
 
-        brandRepo.save(brand);
-        return Response.setUpResponse(200, brand.getName() + " was added successfully");
+        brandRepo.save(carBrand);
+        return Response.setUpResponse(200, carBrand.getName() + " was added successfully");
 
     }
 
     public ResponseEntity<?> deleteBrand(Long id) {
 
-        Brand brand = brandRepo.getBrandById(id);
-        if (brand == null)
+        CarBrand carBrand = brandRepo.getBrandById(id);
+        if (carBrand == null)
             return Response.setUpResponse(400, "No record found");
-        brand.setDeleted(true);
-        brandRepo.save(brand);
+        carBrand.setDeleted(true);
+        brandRepo.save(carBrand);
         return Response.setUpResponse(200, "Brand deleted successfully");
 
     }
 
     public ResponseEntity<?> findAll() {
-        List<Brand> brands = brandRepo.findAllBrand(false);
-        if (brands.isEmpty())
+        List<CarBrand> carBrands = brandRepo.findAllBrand(false);
+        if (carBrands.isEmpty())
             return Response.setUpResponse(404, "No record found");
-        return Response.setUpResponse(200, "List of brands ", brands);
+        return Response.setUpResponse(200, "List of brands ", carBrands);
     }
 
     public ResponseEntity<?> findByName(String name) {
-        Brand brand = brandRepo.getBrandByName(name.toLowerCase());
-        if (brand == null)
+        CarBrand carBrand = brandRepo.getBrandByName(name.toLowerCase());
+        if (carBrand == null)
             return Response.setUpResponse(404, "No record found");
-        return Response.setUpResponse(200, "Record found ", brand);
+        return Response.setUpResponse(200, "Record found ", carBrand);
     }
 
     public ResponseEntity<?> searchBrand(String name) {
-        List<Brand> brand = brandRepo.searchBrand(name);
-        if (brand == null || brand.isEmpty())
+        List<CarBrand> carBrand = brandRepo.searchBrand(name);
+        if (carBrand == null || carBrand.isEmpty())
             return Response.setUpResponse(404, "No record found");
-        return Response.setUpResponse(200, "Record found ", brand);
+        return Response.setUpResponse(200, "Record found ", carBrand);
     }
 }

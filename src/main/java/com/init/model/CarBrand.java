@@ -13,7 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @Data
-public class Brand {
+public class CarBrand {
     @Id
     @GeneratedValue
     private Long id;
