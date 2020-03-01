@@ -19,4 +19,8 @@ public class CarBrand {
     private Long id;
     private String name;
     private boolean deleted;
+
+    public CarBrand(String name) {
+        this.name = name;
+    }
 }

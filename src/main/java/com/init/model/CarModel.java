@@ -25,7 +25,7 @@ public class CarModel {
     private String condition;
     private BigDecimal price;
     private boolean deleted;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinTable(name = "ModelBrand", joinColumns = @JoinColumn(name = "ModelId", referencedColumnName = "id"), inverseJoinColumns =
     @JoinColumn(name = "BrandId", referencedColumnName = "id"))
     private CarBrand carBrand;

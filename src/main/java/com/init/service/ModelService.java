@@ -26,27 +26,30 @@ public class ModelService {
         this.brandRepo = brandRepo;
     }
 
-    public ResponseEntity<?> setup(ModelRequest modelRequest, Condition condition) {
+    public ResponseEntity setup(ModelRequest modelRequest, Condition condition) {
         String error = Validation.validateModelRequest(modelRequest);
         if (error != null)
             return Response.setUpResponse(400, error);
-
+        boolean isUpdate = false;
         CarBrand carBrand = brandRepo.getBrandById(modelRequest.getBrandId());
         if (carBrand == null)
             return Response.setUpResponse(400, "Brand does not exist.");
         if (carBrand.isDeleted())
             return Response.setUpResponse(400," Brand not authorized ");
-        CarModel carModel = modelRepo.getModelById(modelRequest.getBrandId());
+         long nameCount = modelRepo.countByCarBrandIdAndNameAndCondition(carBrand.getId(),modelRequest.getName(),condition.name());
+         if (nameCount >0) return Response.setUpResponse(400,modelRequest.getName()+" already exist for "+carBrand.getName());
+        CarModel carModel = modelRepo.getModelById(modelRequest.getId());
         if (carModel == null)
             carModel = new CarModel();
+        else isUpdate = true;
         carModel = carModel.buildModel(carModel,modelRequest, carBrand,new BigDecimal(modelRequest.getPrice()),condition);
 
-        modelRepo.save(carModel);
-        return Response.setUpResponse(200, carModel.getName() + " was added successfully");
+       carModel =  modelRepo.save(carModel);
+        return Response.setUpResponse(200, carModel.getName() + " was "+(isUpdate ?"updated ":" added " )+"successfully",carModel);
 
     }
 
-    public ResponseEntity<?> deleteBrand(Long id) {
+    public ResponseEntity deleteBrand(Long id) {
 
         CarModel carModel = modelRepo.getModelById(id);
         if (carModel == null)
@@ -57,29 +60,29 @@ public class ModelService {
 
     }
 
-    public ResponseEntity<?> findAll() {
-        List<CarModel> carModels = modelRepo.findAllModel();
+    public ResponseEntity findAll() {
+        List<CarModel> carModels = modelRepo.findAllModel(false);
         if (carModels.isEmpty())
             return Response.setUpResponse(404, "No record found");
         return Response.setUpResponse(200, "List of models ", carModels);
     }
 
-    public ResponseEntity<?> searchByBrand(String brandName) {
+    public ResponseEntity searchCarModel(String brandName) {
         List<CarModel> carModels = modelRepo.search(brandName,false);
         if (carModels.isEmpty())
             return Response.setUpResponse(404, "No record found");
         return Response.setUpResponse(200, "List of models ", carModels);
     }
 
-    public ResponseEntity<?> findAllByBrand(Long id, String brandName) {
+    public ResponseEntity findAllByBrand(Long id, String brandName) {
         List<CarModel> carModels = modelRepo.findAllByBrand(id,brandName,false);
         if (carModels.isEmpty())
             return Response.setUpResponse(404, "No record found");
         return Response.setUpResponse(200, "List of models ", carModels);
     }
 
-    public ResponseEntity<?> findByName(String name) {
-        CarModel carModel = modelRepo.getModelByName(name.toLowerCase());
+    public ResponseEntity findByName(String name,Condition condition) {
+        CarModel carModel = modelRepo.getModelByName(name.toLowerCase(),condition.name());
         if (carModel == null)
             return Response.setUpResponse(404, "No record found");
         return Response.setUpResponse(200, "Record found ", carModel);

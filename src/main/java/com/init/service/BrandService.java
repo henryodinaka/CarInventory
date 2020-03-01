@@ -26,9 +26,9 @@ public class BrandService {
         String error = Validation.validateBrandRequest(brandRequest);
         if (error != null)
             return Response.setUpResponse(400, error);
-
-        if (brandRepo.getBrandByName(brandRequest.getName()) != null)
-            return Response.setUpResponse(400, "Brand name already exist. Name must be unique");
+         long count = brandRepo.countByName(brandRequest.getName());
+        if (count >0)
+            return Response.setUpResponse(400, "Brand name "+brandRequest.getName()+" already exist. Name must be unique");
 
         CarBrand carBrand = CarBrand.builder().name(brandRequest.getName()).build();
 
@@ -56,7 +56,7 @@ public class BrandService {
     }
 
     public ResponseEntity<?> findByName(String name) {
-        CarBrand carBrand = brandRepo.getBrandByName(name.toLowerCase());
+        CarBrand carBrand = brandRepo.getBrandByName(name);
         if (carBrand == null)
             return Response.setUpResponse(404, "No record found");
         return Response.setUpResponse(200, "Record found ", carBrand);

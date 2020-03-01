@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface BrandRepo extends JpaRepository<CarBrand,Long> {
 
-    @Query("select b from CarBrand b where  lower( b.name) =?1")
+    @Query("select b from CarBrand b where  lower( b.name) =lower( ?1)")
     CarBrand getBrandByName(String name);
 
     @Query("select b from CarBrand b where  lower( b.name) like %?1%")
@@ -19,4 +19,6 @@ public interface BrandRepo extends JpaRepository<CarBrand,Long> {
     @Query("select b from CarBrand b where  b.deleted =?1")
     List<CarBrand> findAllBrand(boolean isDeleted);
     CarBrand getBrandById(Long id);
+
+    long countByName(String name);
 }

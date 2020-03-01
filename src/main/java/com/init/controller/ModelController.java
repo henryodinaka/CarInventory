@@ -21,14 +21,14 @@ public class ModelController {
     }
 
     @GetMapping("/name")
-    public ResponseEntity<?> getByName(@RequestParam String name){
-        return modelService.findByName(name);
+    public ResponseEntity<?> getByName(@RequestParam String name, @RequestParam Condition condition){
+        return modelService.findByName(name,condition);
     }
 
 
     @GetMapping("/search")
     public ResponseEntity<?> search(String name){
-        return modelService.searchByBrand(name);
+        return modelService.searchCarModel(name);
     }
 
     @GetMapping("/all")
