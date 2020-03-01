@@ -15,10 +15,10 @@ public interface ModelRepo extends JpaRepository<CarModel,Long> {
     @Query("select m from CarModel m where  lower( m.name) =?1")
     CarModel getModelByName(String name);
 
-    @Query("select m from CarModel m where m.brand.id = ?1 or m.brand.name =?2 and m.deleted =?3")
+    @Query("select m from CarModel m where m.carBrand.id = ?1 or m.carBrand.name =?2 and m.deleted =?3")
     List<CarModel> findAllByBrand(Long id, String brandName, boolean deleted);
 
-    @Query("select m from CarModel m where (lower( m.brand.name) like %?1% or lower(m.name) like %?1%) and m.deleted =?2")
+    @Query("select m from CarModel m where (lower( m.carBrand.name) like %?1% or lower(m.name) like %?1%) and m.deleted =?2")
     List<CarModel> search(String brandName, boolean isDeleted);
 
     @Query("select m from CarModel m where  m.deleted =?2")

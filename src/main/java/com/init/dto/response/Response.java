@@ -13,12 +13,10 @@ import java.io.Serializable;
 @Slf4j
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@AllArgsConstructor
 public class Response implements Serializable {
 
     private String statusCode;
     private String statusMessage;
-    private Boolean isAccountText;
     private Object data;
 
     public Response(Integer statusCode, String statusMessage, Object data) {
