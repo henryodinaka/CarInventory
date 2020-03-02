@@ -82,7 +82,7 @@ public class ModelService {
     }
 
     public ResponseEntity findByName(String name,Condition condition) {
-        CarModel carModel = modelRepo.getModelByName(name.toLowerCase(),condition.name());
+        List<CarModel> carModel = modelRepo.getModelByName(name.toLowerCase(),condition.name());
         if (carModel == null)
             return Response.setUpResponse(404, "No record found");
         return Response.setUpResponse(200, "Record found ", carModel);
