@@ -37,7 +37,7 @@ public class ModelService {
         if (carBrand.isDeleted())
             return Response.setUpResponse(400," Brand not authorized ");
          long nameCount = modelRepo.countByCarBrandIdAndNameAndCondition(carBrand.getId(),modelRequest.getName(),condition.name());
-         if (nameCount >0) return Response.setUpResponse(400,modelRequest.getName()+" already exist for "+carBrand.getName());
+         if (nameCount >0) return Response.setUpResponse(409,modelRequest.getName()+" already exist for "+carBrand.getName());
         CarModel carModel = modelRepo.getModelById(modelRequest.getId());
         if (carModel == null)
             carModel = new CarModel();

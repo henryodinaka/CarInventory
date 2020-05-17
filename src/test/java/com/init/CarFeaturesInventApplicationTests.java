@@ -104,7 +104,7 @@ class CarFeaturesInventApplicationTests {
                 .build();
         ResponseEntity responseEntity = modelService.setup(request, Condition.USED);
 
-        assertEquals(200,responseEntity.getStatusCode().value(),"Failed to save Car Model");
+        assertEquals(409,responseEntity.getStatusCode().value(),"Failed to save Car Model");
     }
 
     @Test
